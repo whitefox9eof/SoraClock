@@ -4,11 +4,22 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Version>0.1</Version>
+    <Version>0.1.0</Version>
     <Authors>WhiteFox</Authors>
     <Company />
     <RepositoryUrl>https://github.com/whitefox9eof/SoraClock</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary.dll">
+      <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+    </COMReference>
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="MainSettings.Designer.cs">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Media;
 using System.Windows;
 using System.Windows.Threading;
@@ -37,6 +38,7 @@ namespace SoraClock
             { Top = settings.WindowTop; }
             else
             { Top = (SystemParameters.VirtualScreenHeight - Height) / 2; }
+            windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
         }
 
         /// <summary>
@@ -101,6 +103,24 @@ namespace SoraClock
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+        /// <summary>
+        /// 設定画面表示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SettingWindow window = new SettingWindow();
+            window.settingEvent += new SettingWindow.SettingEventHandler(SettingWindow_EventHandler);
+            window.Show();
+        }
+        private void SettingWindow_EventHandler(object sender, SettingEventArgs e)
+        {
+            if(e.opacity > 0)
+            {
+                windowBackgroundColor.Opacity = (double)e.opacity / 100;
+            }
         }
     }
 }

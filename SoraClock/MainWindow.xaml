@@ -5,17 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoraClock"
         mc:Ignorable="d"
-        Title="MainWindow" Height="50" Width="120" WindowStyle="None"
+        Title="MainWindow" Height="50" Width="120" WindowStyle="None" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Window.Background>
+        <SolidColorBrush x:Name="windowBackgroundColor" Color="#FFF7FAFF" Opacity="0.8"/>
+    </Window.Background>
     <Window.ContextMenu>
         <ContextMenu>
             <MenuItem x:Name="topmostMenuItem" Header="最前面表示" IsCheckable="True" Checked="topmostMenuItem_Checked" Unchecked="topmostMenuItem_Unchecked" />
+            <MenuItem x:Name="settingsMenuItem" Header="設定" Click="settingsMenuItem_Click" />
             <MenuItem x:Name="exitMenuItem" Header="終了" Click="exitMenuItem_Click" />
         </ContextMenu>
     </Window.ContextMenu>
-    <Grid>
+    <Grid Margin="7">
         <Viewbox>
-            <TextBlock x:Name="clockTextBlock" Text="00:00" FontSize="14" FontFamily="Meiryo UI" />
+            <TextBlock x:Name="clockTextBlock" Text="00:00" FontFamily="Meiryo UI" Foreground="#FFDC8D83" FontWeight="Bold">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="1" Direction="330" Color="#FF9E7B04" Opacity="0.8" BlurRadius="2"/>
+                </TextBlock.Effect>
+            </TextBlock>
         </Viewbox>
     </Grid>
 </Window>

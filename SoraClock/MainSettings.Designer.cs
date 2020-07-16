@@ -58,5 +58,17 @@ namespace SoraClock {
                 this["Topmost"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int WindowOpacity {
+            get {
+                return ((int)(this["WindowOpacity"]));
+            }
+            set {
+                this["WindowOpacity"] = value;
+            }
+        }
     }
 }
