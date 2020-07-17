@@ -8,7 +8,7 @@
         Title="MainWindow" Height="80" Width="150" WindowStyle="None" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Background>
-        <SolidColorBrush x:Name="windowBackgroundColor" Color="#FFF7FAFF" Opacity="0"/>
+        <SolidColorBrush x:Name="windowBackgroundColor"/>
     </Window.Background>
     <Window.ContextMenu>
         <ContextMenu>

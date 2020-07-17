@@ -4,17 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoraClock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="設定" Height="300" Width="200">
+        Title="設定" Height="300" Width="220">
     <StackPanel HorizontalAlignment="Left" Margin="10">
         <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Margin="5" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-        <TextBlock Text="背景の不透明度"/>
+        <TextBlock Text="背景の不透明度" Margin="5"/>
         <StackPanel Orientation="Horizontal">
             <Slider x:Name="opacitySlider" Value="{Binding Text, ElementName=opacityTextBox}"
                     Width="120" Margin="5" Minimum="0" Maximum="100" LargeChange="10" IsSnapToTickEnabled="True" TickFrequency="1"
                     ValueChanged="opacitySlider_ValueChanged"/>
             <TextBox x:Name="opacityTextBox" Text="{Binding Value, ElementName=opacitySlider}" Margin="5" Width="40" />
         </StackPanel>
-        
+        <TextBlock Text="背景色" Margin="5" />
+        <xctk:ColorPicker x:Name="clockBackgroundColorPicker" Margin="5" SelectedColorChanged="clockBackgroundColorPicker_SelectedColorChanged" />
+        <TextBlock Text="文字色" Margin="5" />
+        <xctk:ColorPicker x:Name="clockForegroundColorPicker" Margin="5" SelectedColorChanged="clockForegroundColorPicker_SelectedColorChanged"  />
     </StackPanel>
 </Window>

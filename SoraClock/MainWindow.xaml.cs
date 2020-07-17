@@ -2,10 +2,19 @@
 using System.Diagnostics;
 using System.Media;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace SoraClock
 {
+    public static class SCTools : Object
+    {
+        public static SolidColorBrush stringToSolidColorBrush(string colorCode)
+        {
+            Color color = (Color)ColorConverter.ConvertFromString(colorCode);;
+            return new SolidColorBrush(color);
+        }
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -38,7 +47,11 @@ namespace SoraClock
             { Top = settings.WindowTop; }
             else
             { Top = (SystemParameters.VirtualScreenHeight - Height) / 2; }
+            // 色・不透明度
+            windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.ClockBackgroundColor);
             windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
+            // 時刻テキストの初期設定
+            clockTextBlock.Foreground = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
         }
 
         /// <summary>
@@ -115,11 +128,26 @@ namespace SoraClock
             window.settingEvent += new SettingWindow.SettingEventHandler(SettingWindow_EventHandler);
             window.Show();
         }
+        /// <summary>
+        /// 設定画面での変更を反映させるためのイベントハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingWindow_EventHandler(object sender, SettingEventArgs e)
         {
-            if(e.opacity > 0)
+            if(e.opacity >= 0)
             {
+                Debug.WriteLine("op:"+e.opacity);
+                Debug.WriteLine((double)e.opacity / 100);
                 windowBackgroundColor.Opacity = (double)e.opacity / 100;
+            }
+            if (e.clockBackgroundColor != null)
+            {
+                windowBackgroundColor.Color = (Color)e.clockBackgroundColor;
+            }
+            if(e.clockForegroundColor != null)
+            {
+                clockTextBlock.Foreground = new SolidColorBrush((Color)e.clockForegroundColor);
             }
         }
     }

@@ -1,16 +1,18 @@
 ﻿using IWshRuntimeLibrary;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Media;
 
 namespace SoraClock
 {
     public class SettingEventArgs : EventArgs
     {
-        public int opacity;
+        public int opacity = -1;
+        public Color? clockBackgroundColor = null;
+        public Color? clockForegroundColor = null;
     }
     /// <summary>
     /// SettingWindow.xaml の相互作用ロジック
@@ -25,13 +27,18 @@ namespace SoraClock
         public SettingWindow()
         {
             InitializeComponent();
+            settings = MainSettings.Default;
             // スタートアップ登録チェックボックス初期化
-            if(System.IO.File.Exists(getShortcutPath()))
+            if (System.IO.File.Exists(getShortcutPath()))
             {
                 startupCheckBox.IsChecked = true;
             }
-            settings = MainSettings.Default;
+            // 背景色
+            clockBackgroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockBackgroundColor);
+            // 背景不透明度
             opacitySlider.Value = settings.WindowOpacity;
+            // 時刻の文字色
+            clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor); 
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -58,14 +65,21 @@ namespace SoraClock
             Marshal.FinalReleaseComObject(shortcut);
             Marshal.FinalReleaseComObject(shell);
         }
-
-        private string getShortcutPath()
+        /// <summary>
+        /// スタートアップのパス
+        /// </summary>
+        /// <returns></returns>
+        private static string getShortcutPath()
         {
             string shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             shortcutPath = Path.Combine(shortcutPath, Assembly.GetExecutingAssembly().GetName() + ".lnk");
             return shortcutPath;
         }
-
+        /// <summary>
+        /// スタートアップを解除
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             string FilePath = getShortcutPath();
@@ -79,15 +93,59 @@ namespace SoraClock
             }
             fileInfo.Delete();
         }
-
+        /// <summary>
+        /// 背景の不透明度を変更
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void opacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            SettingEventArgs args = new SettingEventArgs();
+            args.opacity = (int)e.NewValue;
+
+            if (settingEvent != null)
+            {
+                settingEvent(this, args);
+            }
+
+            settings.WindowOpacity = args.opacity;
+            settings.Save();
+        }
+        /// <summary>
+        /// 背景色の変更
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clockBackgroundColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            SettingEventArgs args = new SettingEventArgs();
+            args.clockBackgroundColor = (Color)e.NewValue;
+
+            if (settingEvent != null)
+            {
+                settingEvent(this, args);
+            }
+
+            settings.ClockBackgroundColor = clockBackgroundColorPicker.SelectedColorText;
+            settings.Save();
+        }
+
+        /// <summary>
+        /// 時刻文字色の変更
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clockForegroundColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
             SettingEventArgs settingEventArgs = new SettingEventArgs();
-            settingEventArgs.opacity = (int)opacitySlider.Value;
-            if(settingEvent != null)
+            settingEventArgs.clockForegroundColor = (Color)e.NewValue;
+            if (settingEvent != null)
             {
                 settingEvent(this, settingEventArgs);
             }
+
+            settings.ClockForegroundColor = clockForegroundColorPicker.SelectedColorText;
+            settings.Save();
         }
     }
 }

@@ -70,5 +70,29 @@ namespace SoraClock {
                 this["WindowOpacity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFDC8D83")]
+        public string ClockForegroundColor {
+            get {
+                return ((string)(this["ClockForegroundColor"]));
+            }
+            set {
+                this["ClockForegroundColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFF7FAFF")]
+        public string ClockBackgroundColor {
+            get {
+                return ((string)(this["ClockBackgroundColor"]));
+            }
+            set {
+                this["ClockBackgroundColor"] = value;
+            }
+        }
     }
 }
