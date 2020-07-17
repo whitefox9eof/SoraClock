@@ -61,7 +61,7 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int WindowOpacity {
             get {
                 return ((int)(this["WindowOpacity"]));
