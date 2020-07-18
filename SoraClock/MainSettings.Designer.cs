@@ -86,12 +86,12 @@ namespace SoraClock {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFC8E7EC")]
-        public string ClockBackgroundColor {
+        public string WindowBackgroundColor {
             get {
-                return ((string)(this["ClockBackgroundColor"]));
+                return ((string)(this["WindowBackgroundColor"]));
             }
             set {
-                this["ClockBackgroundColor"] = value;
+                this["WindowBackgroundColor"] = value;
             }
         }
         
@@ -116,6 +116,30 @@ namespace SoraClock {
             }
             set {
                 this["FontFamily"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("70")]
+        public int VoiceVolume {
+            get {
+                return ((int)(this["VoiceVolume"]));
+            }
+            set {
+                this["VoiceVolume"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool WindowBorder {
+            get {
+                return ((bool)(this["WindowBorder"]));
+            }
+            set {
+                this["WindowBorder"] = value;
             }
         }
     }

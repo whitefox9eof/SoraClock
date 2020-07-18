@@ -11,8 +11,20 @@ namespace SoraClock
     {
         public static SolidColorBrush stringToSolidColorBrush(string colorCode)
         {
-            Color color = (Color)ColorConverter.ConvertFromString(colorCode);;
+            Color color = (Color)ColorConverter.ConvertFromString(colorCode);
             return new SolidColorBrush(color);
+        }
+        /// <summary>
+        /// voiceフォルダの音声を再生する
+        /// </summary>
+        /// <param name="file"></param>
+        public static void playVoice(string file)
+        {
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri(@"resources\voice\" + file, UriKind.Relative));
+            player.Volume = (double)MainSettings.Default.VoiceVolume / 100;
+            Debug.WriteLine(player.Volume);
+            player.Play();
         }
     }
     /// <summary>
@@ -23,7 +35,6 @@ namespace SoraClock
         private MainSettings settings;
         private DispatcherTimer timer;
         private int currentHour;
-        private SoundPlayer player;
 
         public MainWindow()
         {
@@ -48,7 +59,7 @@ namespace SoraClock
             else
             { Top = (SystemParameters.VirtualScreenHeight - Height) / 2; }
             // 色・不透明度
-            windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.ClockBackgroundColor);
+            windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor);
             windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
             // 枠線の初期化
             SolidColorBrush scb = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
@@ -56,7 +67,32 @@ namespace SoraClock
             inlineBorder.BorderBrush = outlineBorder.BorderBrush;
             // 時刻文字色の初期化
             clockTextBlock.Foreground = scb;
-            clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
+            DateTime time = DateTime.Now;
+            clockTextBlock.Text = time.ToString(settings.TimeFormat);
+            
+        }
+        /// <summary>
+        /// 起動時ボイス
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MainWindow_ContentRendered(object sender, EventArgs e)
+        {
+            await System.Threading.Tasks.Task.Delay(1000);
+            DateTime time = DateTime.Now;
+            // 起動時のボイス
+            if (time.Hour >= 4 && time.Hour <= 10)
+            {
+                SCTools.playVoice("luanch-0.wav");
+            }
+            else if (time.Hour >= 11 && time.Hour <= 17)
+            {
+                SCTools.playVoice("luanch-1.wav");
+            }
+            else
+            {
+                SCTools.playVoice("luanch-2.wav");
+            }
         }
 
         /// <summary>
@@ -70,8 +106,7 @@ namespace SoraClock
             clockTextBlock.Text = nowDateTime.ToString(settings.TimeFormat);
             if(nowDateTime.Hour != currentHour)
             {
-                player = new SoundPlayer("resources/voice/time-" + nowDateTime.Hour + ".wav");
-                player.Play();
+                SCTools.playVoice("time-"+ nowDateTime.Hour + ".wav");
                 currentHour = nowDateTime.Hour;
             }
         }
@@ -130,11 +165,53 @@ namespace SoraClock
         private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             SettingWindow window = new SettingWindow();
-            window.settingEvent += new SettingWindow.SettingEventHandler(SettingWindow_EventHandler);
             window.Closed += Window_Closed;
+            //MainSettings.Default.SettingChanging += Default_SettingChanging;
+            MainSettings.Default.PropertyChanged += Default_PropertyChanged;
             window.Show();
            settingsMenuItem.IsEnabled = false;
         }
+
+        private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            //Debug.WriteLine(e.PropertyName);
+            switch (e.PropertyName)
+            {
+                // 全般
+                case "TimeFormat":
+                    clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
+                    break;
+                // ウィンドウ
+                case "WindowOpacity":
+                    windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
+                    break;
+                case "WindowBackgroundColor":
+                    windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor); 
+                    break;
+                case "WindowBorder":
+                    if (settings.WindowBorder == true)
+                    {
+                        outlineBorder.BorderThickness = new Thickness(0);
+                        inlineBorder.BorderThickness = new Thickness(0);
+                    }
+                    else
+                    {
+                        outlineBorder.BorderThickness = new Thickness(1);
+                        inlineBorder.BorderThickness = new Thickness(3);
+                    }
+                    break;
+                // フォント
+                case "ClockForegroundColor":
+                    clockTextBlock.Foreground = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
+                    break;
+            }
+        }
+
+        private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
+        {
+            Debug.WriteLine("ちぇんじんぐうううううううううううううう");
+        }
+
         /// <summary>
         /// 設定画面を閉じたらコンテキストメニューの[設定]を有効化
         /// </summary>
@@ -145,30 +222,5 @@ namespace SoraClock
             settingsMenuItem.IsEnabled = true;
         }
 
-
-        /// <summary>
-        /// 設定画面での変更を反映させるためのイベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SettingWindow_EventHandler(object sender, SettingEventArgs e)
-        {
-            if (e.opacity >= 0)
-            {
-                windowBackgroundColor.Opacity = (double)e.opacity / 100;
-            }
-            if (e.clockBackgroundColor != null)
-            {
-                windowBackgroundColor.Color = (Color)e.clockBackgroundColor;
-            }
-            if(e.clockForegroundColor != null)
-            {
-                clockTextBlock.Foreground = new SolidColorBrush((Color)e.clockForegroundColor);
-            }
-            if(e.timeFormat != null)
-            {
-                clockTextBlock.Text = DateTime.Now.ToString(e.timeFormat);
-            }
-        }
     }
 }

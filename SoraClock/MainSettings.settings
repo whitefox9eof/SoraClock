@@ -17,7 +17,7 @@
     <Setting Name="ClockForegroundColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">#FFFFA5A5</Value>
     </Setting>
-    <Setting Name="ClockBackgroundColor" Type="System.String" Scope="User">
+    <Setting Name="WindowBackgroundColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">#FFC8E7EC</Value>
     </Setting>
     <Setting Name="TimeFormat" Type="System.String" Scope="User">
@@ -25,6 +25,12 @@
     </Setting>
     <Setting Name="FontFamily" Type="System.Windows.Media.FontFamily" Scope="User">
       <Value Profile="(Default)">Lucida Sans Unicode</Value>
+    </Setting>
+    <Setting Name="VoiceVolume" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">70</Value>
+    </Setting>
+    <Setting Name="WindowBorder" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -6,24 +6,90 @@
         xmlns:local="clr-namespace:SoraClock"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="設定" Height="320" Width="220" Icon="/icon.ico"  Background="#FFC8E7EC">
-    <StackPanel HorizontalAlignment="Left" Margin="10">
-        <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Margin="4" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-        <Label Content="背景の不透明度" />
-        <StackPanel Orientation="Horizontal">
-            <Slider x:Name="opacitySlider" Value="{Binding Text, ElementName=opacityTextBox}"
+        Title="設定" Height="320" Width="340" Icon="/icon.ico"  Background="#FFC8E7EC">
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Padding" Value="14,4" />
+                </Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Margin" Value="6,2" />
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="Padding" Value="6,4" />
+                </Style>
+                <Style TargetType="CheckBox">
+                    <Setter Property="Margin" Value="3" />
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Padding" Value="4,4" />
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="全般">
+                <StackPanel HorizontalAlignment="Left">
+                    <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                    <Label Content="時刻の表示形式" />
+                    <TextBox x:Name="timeFormatTextBox" Text="HH:mm" Margin="4" TextChanged="timeFormatTextBox_TextChanged"/>
+
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="ウィンドウ">
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Content="背景の不透明度" />
+                    <StackPanel Orientation="Horizontal" Margin="0">
+                        <Slider x:Name="opacitySlider" Value="{Binding Text, ElementName=opacityTextBox}"
                     Width="120" Margin="4" Minimum="0" Maximum="100" LargeChange="10" IsSnapToTickEnabled="True" TickFrequency="1"
                     ValueChanged="opacitySlider_ValueChanged"/>
-            <TextBox x:Name="opacityTextBox" Text="{Binding Value, ElementName=opacitySlider}" Margin="4" Width="40" />
-        </StackPanel>
-        <Label Content="背景色" />
-        <xctk:ColorPicker x:Name="clockBackgroundColorPicker" Margin="4" SelectedColorChanged="clockBackgroundColorPicker_SelectedColorChanged" />
-        <Label Content="文字色"/>
-        <xctk:ColorPicker x:Name="clockForegroundColorPicker" Margin="4" SelectedColorChanged="clockForegroundColorPicker_SelectedColorChanged"  />
-        <!--<Label Content="フォント" />
+                        <TextBox x:Name="opacityTextBox" Text="{Binding Value, ElementName=opacitySlider}" Margin="4" Width="40" />
+                    </StackPanel>
+                    <Label Content="背景色" />
+                    <xctk:ColorPicker x:Name="clockBackgroundColorPicker"
+                                      Width="100" Margin="4" SelectedColorChanged="clockBackgroundColorPicker_SelectedColorChanged" />
+                    <CheckBox x:Name="windowBorderCheckBox" Content="ウィンドウの枠線を表示する"
+                              Checked="windowBorderCheckBox_Checked" Unchecked="windowBorderCheckBox_Unchecked" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="フォント">
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Content="文字色"/>
+                    <xctk:ColorPicker x:Name="clockForegroundColorPicker"
+                                     Width="100" Margin="4" SelectedColorChanged="clockForegroundColorPicker_SelectedColorChanged"  />
+                    <!--<Label Content="フォント" />
         <Button x:Name="fontButton" Content="フォントを選択" Click="fontButton_Click" />-->
-        
-        <Label Content="時刻の表示形式" />
-        <TextBox x:Name="timeFormatTextBox" Text="HH:mm" Margin="4" TextChanged="timeFormatTextBox_TextChanged"/>
-    </StackPanel>
+                    
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="音声">
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Content="音量" />
+                    <StackPanel Orientation="Horizontal" Margin="0">
+                        <Slider x:Name="voiceVolumeSlider" Value="{Binding Text, ElementName=voiceVolumeTextBox}"
+                                Width="120" Margin="4"
+                                Minimum="1" Maximum="100" LargeChange="10" IsSnapToTickEnabled="True" TickFrequency="1"
+                                ValueChanged="voiceVolumeSlider_ValueChanged"/>
+                        <TextBox x:Name="voiceVolumeTextBox" Text="{Binding Value, ElementName=voiceVolumeSlider}" Width="40" />
+                        <Button x:Name="voiceTestButton" Content="テスト" Width="50" Click="voiceTestButton_Click" />
+                    </StackPanel>
+                    <!--<Label Content="追加の音声再生設定" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="add" Content="追加" />
+                        <Button x:Name="delete" Content="削除" />
+                    </StackPanel>
+                    <ScrollViewer>
+                        <StackPanel>
+                            <Label Content="設定1" />
+                            <xctk:TimePicker />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="file" Width="140" />
+                                <Button Content="選択" />
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>-->
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>

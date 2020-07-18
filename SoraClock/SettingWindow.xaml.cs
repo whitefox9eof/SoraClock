@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -14,8 +15,24 @@ namespace SoraClock
     {
         public int opacity = -1;
         public Color? clockBackgroundColor = null;
+        public bool? windowBorder = null;
         public Color? clockForegroundColor = null;
         public string timeFormat = null;
+    }
+    public class WindowSettingEventArgs : SettingEventArgs
+    {
+        public WindowSettingEventArgs(int opacity)
+        {
+            this.opacity = opacity;
+        }
+        public WindowSettingEventArgs(Color backgroundColor)
+        {
+            this.clockBackgroundColor = backgroundColor;
+        }
+        public WindowSettingEventArgs(bool border)
+        {
+            this.windowBorder = border;
+        }
     }
     /// <summary>
     /// SettingWindow.xaml の相互作用ロジック
@@ -36,15 +53,21 @@ namespace SoraClock
             {
                 startupCheckBox.IsChecked = true;
             }
-            // 背景色
-            clockBackgroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockBackgroundColor);
-            // 背景不透明度
+            // ウィンドウの設定
+            clockBackgroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor);
             opacitySlider.Value = settings.WindowOpacity;
+            windowBorderCheckBox.IsChecked = settings.WindowBorder;
             // 時刻の文字色
             clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor);
             timeFormatTextBox.Text = settings.TimeFormat;
+            // 音量
+            voiceVolumeSlider.Value = settings.VoiceVolume;
         }
-
+        /// <summary>
+        /// スタートアップ登録
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             string shortcutPath = getShortcutPath(); 
@@ -104,15 +127,7 @@ namespace SoraClock
         /// <param name="e"></param>
         private void opacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            SettingEventArgs args = new SettingEventArgs();
-            args.opacity = (int)e.NewValue;
-
-            if (settingEvent != null)
-            {
-                settingEvent(this, args);
-            }
-
-            settings.WindowOpacity = args.opacity;
+            settings.WindowOpacity = (int)e.NewValue;
             settings.Save();
         }
         /// <summary>
@@ -122,15 +137,23 @@ namespace SoraClock
         /// <param name="e"></param>
         private void clockBackgroundColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            SettingEventArgs args = new SettingEventArgs();
-            args.clockBackgroundColor = (Color)e.NewValue;
+            settings.WindowBackgroundColor = clockBackgroundColorPicker.SelectedColorText;
+            settings.Save();
+        }
+        /// <summary>
+        /// ウィンドウの枠線の有無
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void windowBorderCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            settings.WindowBorder = true;
+            settings.Save();
+        }
 
-            if (settingEvent != null)
-            {
-                settingEvent(this, args);
-            }
-
-            settings.ClockBackgroundColor = clockBackgroundColorPicker.SelectedColorText;
+        private void windowBorderCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            settings.WindowBorder = false;
             settings.Save();
         }
 
@@ -141,13 +164,6 @@ namespace SoraClock
         /// <param name="e"></param>
         private void clockForegroundColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            SettingEventArgs settingEventArgs = new SettingEventArgs();
-            settingEventArgs.clockForegroundColor = (Color)e.NewValue;
-            if (settingEvent != null)
-            {
-                settingEvent(this, settingEventArgs);
-            }
-
             settings.ClockForegroundColor = clockForegroundColorPicker.SelectedColorText;
             settings.Save();
         }
@@ -159,12 +175,6 @@ namespace SoraClock
         /// <param name="e"></param>
         private void timeFormatTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            SettingEventArgs args = new SettingEventArgs();
-            args.timeFormat = timeFormatTextBox.Text;
-            if(settingEvent != null)
-            {
-                settingEvent(this, args);
-            }
             // TextChangedイベントの時だけsettings=nullになることがありアプリ停止してしまうため
             if(settings != null)
             {
@@ -173,8 +183,29 @@ namespace SoraClock
             }
         }
 
-        private void fontButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 音量の変更
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void voiceVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if(settings != null)
+            {
+                settings.VoiceVolume = (int)voiceVolumeSlider.Value;
+                settings.Save();
+            }
+        }
+        /// <summary>
+        /// 音量テスト
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void voiceTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            settings.VoiceVolume = (int)voiceVolumeSlider.Value;
+            settings.Save();
+            SCTools.playVoice("time-" + DateTime.Now.Hour + ".wav");
         }
     }
 }
