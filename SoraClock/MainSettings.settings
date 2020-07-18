@@ -15,10 +15,16 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ClockForegroundColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">#FFDC8D83</Value>
+      <Value Profile="(Default)">#FFFFA5A5</Value>
     </Setting>
     <Setting Name="ClockBackgroundColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">#FFF7FAFF</Value>
+      <Value Profile="(Default)">#FFC8E7EC</Value>
+    </Setting>
+    <Setting Name="TimeFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">HH:mm</Value>
+    </Setting>
+    <Setting Name="FontFamily" Type="System.Windows.Media.FontFamily" Scope="User">
+      <Value Profile="(Default)">Lucida Sans Unicode</Value>
     </Setting>
   </Settings>
 </SettingsFile>

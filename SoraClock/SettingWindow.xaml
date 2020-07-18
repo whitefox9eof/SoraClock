@@ -6,19 +6,24 @@
         xmlns:local="clr-namespace:SoraClock"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="設定" Height="300" Width="220">
+        Title="設定" Height="320" Width="220" Icon="/icon.ico"  Background="#FFC8E7EC">
     <StackPanel HorizontalAlignment="Left" Margin="10">
-        <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Margin="5" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-        <TextBlock Text="背景の不透明度" Margin="5"/>
+        <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Margin="4" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+        <Label Content="背景の不透明度" />
         <StackPanel Orientation="Horizontal">
             <Slider x:Name="opacitySlider" Value="{Binding Text, ElementName=opacityTextBox}"
-                    Width="120" Margin="5" Minimum="0" Maximum="100" LargeChange="10" IsSnapToTickEnabled="True" TickFrequency="1"
+                    Width="120" Margin="4" Minimum="0" Maximum="100" LargeChange="10" IsSnapToTickEnabled="True" TickFrequency="1"
                     ValueChanged="opacitySlider_ValueChanged"/>
-            <TextBox x:Name="opacityTextBox" Text="{Binding Value, ElementName=opacitySlider}" Margin="5" Width="40" />
+            <TextBox x:Name="opacityTextBox" Text="{Binding Value, ElementName=opacitySlider}" Margin="4" Width="40" />
         </StackPanel>
-        <TextBlock Text="背景色" Margin="5" />
-        <xctk:ColorPicker x:Name="clockBackgroundColorPicker" Margin="5" SelectedColorChanged="clockBackgroundColorPicker_SelectedColorChanged" />
-        <TextBlock Text="文字色" Margin="5" />
-        <xctk:ColorPicker x:Name="clockForegroundColorPicker" Margin="5" SelectedColorChanged="clockForegroundColorPicker_SelectedColorChanged"  />
+        <Label Content="背景色" />
+        <xctk:ColorPicker x:Name="clockBackgroundColorPicker" Margin="4" SelectedColorChanged="clockBackgroundColorPicker_SelectedColorChanged" />
+        <Label Content="文字色"/>
+        <xctk:ColorPicker x:Name="clockForegroundColorPicker" Margin="4" SelectedColorChanged="clockForegroundColorPicker_SelectedColorChanged"  />
+        <!--<Label Content="フォント" />
+        <Button x:Name="fontButton" Content="フォントを選択" Click="fontButton_Click" />-->
+        
+        <Label Content="時刻の表示形式" />
+        <TextBox x:Name="timeFormatTextBox" Text="HH:mm" Margin="4" TextChanged="timeFormatTextBox_TextChanged"/>
     </StackPanel>
 </Window>

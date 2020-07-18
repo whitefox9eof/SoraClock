@@ -11,6 +11,7 @@
     <RepositoryUrl>https://github.com/whitefox9eof/SoraClock</RepositoryUrl>
     <Platforms>AnyCPU;x64</Platforms>
     <StartupObject>SoraClock.App</StartupObject>
+    <PackageIcon>icon.ico</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -30,6 +31,10 @@
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary.dll">
@@ -139,6 +144,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icon.ico" />
   </ItemGroup>
 
 </Project>

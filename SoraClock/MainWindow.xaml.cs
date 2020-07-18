@@ -50,8 +50,13 @@ namespace SoraClock
             // 色・不透明度
             windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.ClockBackgroundColor);
             windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
-            // 時刻テキストの初期設定
-            clockTextBlock.Foreground = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
+            // 枠線の初期化
+            SolidColorBrush scb = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
+            outlineBorder.BorderBrush = (Brush)scb;
+            inlineBorder.BorderBrush = outlineBorder.BorderBrush;
+            // 時刻文字色の初期化
+            clockTextBlock.Foreground = scb;
+            clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
         }
 
         /// <summary>
@@ -62,7 +67,7 @@ namespace SoraClock
         private void Timer_Tick(object sender, EventArgs e)
         {
             DateTime nowDateTime = DateTime.Now;
-            clockTextBlock.Text = nowDateTime.ToString("HH:mm");
+            clockTextBlock.Text = nowDateTime.ToString(settings.TimeFormat);
             if(nowDateTime.Hour != currentHour)
             {
                 player = new SoundPlayer("resources/voice/time-" + nowDateTime.Hour + ".wav");
@@ -126,8 +131,21 @@ namespace SoraClock
         {
             SettingWindow window = new SettingWindow();
             window.settingEvent += new SettingWindow.SettingEventHandler(SettingWindow_EventHandler);
+            window.Closed += Window_Closed;
             window.Show();
+           settingsMenuItem.IsEnabled = false;
         }
+        /// <summary>
+        /// 設定画面を閉じたらコンテキストメニューの[設定]を有効化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            settingsMenuItem.IsEnabled = true;
+        }
+
+
         /// <summary>
         /// 設定画面での変更を反映させるためのイベントハンドラ
         /// </summary>
@@ -135,10 +153,8 @@ namespace SoraClock
         /// <param name="e"></param>
         private void SettingWindow_EventHandler(object sender, SettingEventArgs e)
         {
-            if(e.opacity >= 0)
+            if (e.opacity >= 0)
             {
-                Debug.WriteLine("op:"+e.opacity);
-                Debug.WriteLine((double)e.opacity / 100);
                 windowBackgroundColor.Opacity = (double)e.opacity / 100;
             }
             if (e.clockBackgroundColor != null)
@@ -148,6 +164,10 @@ namespace SoraClock
             if(e.clockForegroundColor != null)
             {
                 clockTextBlock.Foreground = new SolidColorBrush((Color)e.clockForegroundColor);
+            }
+            if(e.timeFormat != null)
+            {
+                clockTextBlock.Text = DateTime.Now.ToString(e.timeFormat);
             }
         }
     }

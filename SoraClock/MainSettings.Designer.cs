@@ -73,7 +73,7 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFDC8D83")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFA5A5")]
         public string ClockForegroundColor {
             get {
                 return ((string)(this["ClockForegroundColor"]));
@@ -85,13 +85,37 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFF7FAFF")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFC8E7EC")]
         public string ClockBackgroundColor {
             get {
                 return ((string)(this["ClockBackgroundColor"]));
             }
             set {
                 this["ClockBackgroundColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("HH:mm")]
+        public string TimeFormat {
+            get {
+                return ((string)(this["TimeFormat"]));
+            }
+            set {
+                this["TimeFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lucida Sans Unicode")]
+        public global::System.Windows.Media.FontFamily FontFamily {
+            get {
+                return ((global::System.Windows.Media.FontFamily)(this["FontFamily"]));
+            }
+            set {
+                this["FontFamily"] = value;
             }
         }
     }

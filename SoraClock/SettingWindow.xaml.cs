@@ -1,9 +1,11 @@
 ﻿using IWshRuntimeLibrary;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SoraClock
@@ -13,6 +15,7 @@ namespace SoraClock
         public int opacity = -1;
         public Color? clockBackgroundColor = null;
         public Color? clockForegroundColor = null;
+        public string timeFormat = null;
     }
     /// <summary>
     /// SettingWindow.xaml の相互作用ロジック
@@ -38,7 +41,8 @@ namespace SoraClock
             // 背景不透明度
             opacitySlider.Value = settings.WindowOpacity;
             // 時刻の文字色
-            clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor); 
+            clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor);
+            timeFormatTextBox.Text = settings.TimeFormat;
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -146,6 +150,31 @@ namespace SoraClock
 
             settings.ClockForegroundColor = clockForegroundColorPicker.SelectedColorText;
             settings.Save();
+        }
+
+        /// <summary>
+        /// 時刻表示のフォーマット
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timeFormatTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            SettingEventArgs args = new SettingEventArgs();
+            args.timeFormat = timeFormatTextBox.Text;
+            if(settingEvent != null)
+            {
+                settingEvent(this, args);
+            }
+            // TextChangedイベントの時だけsettings=nullになることがありアプリ停止してしまうため
+            if(settings != null)
+            {
+                settings.TimeFormat = timeFormatTextBox.Text;
+                settings.Save();
+            }
+        }
+
+        private void fontButton_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

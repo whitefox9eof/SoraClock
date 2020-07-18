@@ -18,12 +18,16 @@
         </ContextMenu>
     </Window.ContextMenu>
     <Grid Margin="7">
-        <Viewbox>
-            <TextBlock x:Name="clockTextBlock" Text="00:00" FontFamily="Lucida Sans Unicode" Foreground="#FFDC8D83" FontWeight="Normal">
-                <TextBlock.Effect>
-                    <DropShadowEffect ShadowDepth="1" Direction="330" Color="#FFF0D9DB" Opacity="0.3" BlurRadius="4"/>
-                </TextBlock.Effect>
-            </TextBlock>
-        </Viewbox>
+        <Border x:Name="outlineBorder" BorderBrush="White" BorderThickness="1">
+            <Border x:Name="inlineBorder" BorderBrush="White" BorderThickness="3" Margin="3">
+            <Viewbox>
+                <TextBlock x:Name="clockTextBlock" FontFamily="Averia Libre" Foreground="#FFDC8D83" FontWeight="Normal">
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="1" Direction="330" Color="#FFF0D9DB" Opacity="0.3" BlurRadius="4"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                </Viewbox>
+            </Border>
+        </Border>
     </Grid>
 </Window>
