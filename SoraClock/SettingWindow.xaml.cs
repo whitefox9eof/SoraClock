@@ -8,40 +8,17 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace SoraClock
 {
-    public class SettingEventArgs : EventArgs
-    {
-        public int opacity = -1;
-        public Color? clockBackgroundColor = null;
-        public bool? windowBorder = null;
-        public Color? clockForegroundColor = null;
-        public string timeFormat = null;
-    }
-    public class WindowSettingEventArgs : SettingEventArgs
-    {
-        public WindowSettingEventArgs(int opacity)
-        {
-            this.opacity = opacity;
-        }
-        public WindowSettingEventArgs(Color backgroundColor)
-        {
-            this.clockBackgroundColor = backgroundColor;
-        }
-        public WindowSettingEventArgs(bool border)
-        {
-            this.windowBorder = border;
-        }
-    }
     /// <summary>
     /// SettingWindow.xaml の相互作用ロジック
     /// </summary>
     public partial class SettingWindow : Window
     {
-        public delegate void SettingEventHandler(object sender, SettingEventArgs e);
-        public event SettingEventHandler settingEvent;
-
         private MainSettings settings;
 
         public SettingWindow()
@@ -53,13 +30,19 @@ namespace SoraClock
             {
                 startupCheckBox.IsChecked = true;
             }
+            timeFormatTextBox.Text = settings.TimeFormat;
             // ウィンドウの設定
             clockBackgroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor);
             opacitySlider.Value = settings.WindowOpacity;
             windowBorderCheckBox.IsChecked = settings.WindowBorder;
-            // 時刻の文字色
+            // フォント
             clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor);
-            timeFormatTextBox.Text = settings.TimeFormat;
+            fontFamilyListBox.SelectedItem = settings.FontFamily;
+            fontStyleListBox.SelectedItem = settings.FontStyle;
+            List<int> fontSizeList = new List<int>(20);
+            for (int i = 4; i < 20 + 4; i++) fontSizeList.Add(i * 2);
+            fontSizeListBox.ItemsSource = fontSizeList;
+            fontSizeListBox.SelectedItem = settings.FontSize;
             // 音量
             voiceVolumeSlider.Value = settings.VoiceVolume;
         }
@@ -206,6 +189,47 @@ namespace SoraClock
             settings.VoiceVolume = (int)voiceVolumeSlider.Value;
             settings.Save();
             SCTools.playVoice("time-" + DateTime.Now.Hour + ".wav");
+        }
+        /// <summary>
+        /// フォントファミリー
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fontFamilyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // フォントファミリーが変更されたらスタイルを1番目に設定
+            settings.FontFamily = (FontFamily)fontFamilyListBox.SelectedItem;
+            fontStyleListBox.ItemsSource = settings.FontFamily.FamilyTypefaces;
+            FamilyTypeface ft = (FamilyTypeface)fontStyleListBox.Items[1];
+            fontStyleListBox.SelectedItem = ft.Style;
+            Debug.WriteLine("ちぇんじど"+ft.Style);
+            settings.FontStyle = ft.Style;
+            settings.Save();
+        }
+        /// <summary>
+        /// フォントスタイル
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fontStyleListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(fontStyleListBox.SelectedItem != null)
+            {
+                // フォントファミリー変更時のスタイルリセットでnullになるため
+                FamilyTypeface ft = (FamilyTypeface)fontStyleListBox.SelectedItem;
+                settings.FontStyle = ft.Style;
+                settings.Save();
+            }
+        }
+        /// <summary>
+        /// フォントサイズ変更
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fontSizeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            settings.FontSize = (int)fontSizeListBox.SelectedItem;
+            settings.Save();
         }
     }
 }

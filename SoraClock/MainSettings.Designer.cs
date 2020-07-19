@@ -109,7 +109,7 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Lucida Sans Unicode")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Averia Libre")]
         public global::System.Windows.Media.FontFamily FontFamily {
             get {
                 return ((global::System.Windows.Media.FontFamily)(this["FontFamily"]));
@@ -140,6 +140,30 @@ namespace SoraClock {
             }
             set {
                 this["WindowBorder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.FontStyle FontStyle {
+            get {
+                return ((global::System.Windows.FontStyle)(this["FontStyle"]));
+            }
+            set {
+                this["FontStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int FontSize {
+            get {
+                return ((int)(this["FontSize"]));
+            }
+            set {
+                this["FontSize"] = value;
             }
         }
     }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SoraClock"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="設定" Height="320" Width="340" Icon="/icon.ico"  Background="#FFC8E7EC">
+        Title="設定" Height="360" Width="480" Icon="/icon.ico"  Background="#FFC8E7EC">
     <Grid>
         <TabControl TabStripPlacement="Left">
             <TabControl.Resources>
@@ -31,8 +31,9 @@
                 <StackPanel HorizontalAlignment="Left">
                     <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                     <Label Content="時刻の表示形式" />
-                    <TextBox x:Name="timeFormatTextBox" Text="HH:mm" Margin="4" TextChanged="timeFormatTextBox_TextChanged"/>
-
+                    <TextBox x:Name="timeFormatTextBox"
+                             Text="{Binding Path=TimeFormat,Source={x:Static local:MainSettings.Default}}"
+                             Margin="4" TextChanged="timeFormatTextBox_TextChanged"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="ウィンドウ">
@@ -56,9 +57,35 @@
                     <Label Content="文字色"/>
                     <xctk:ColorPicker x:Name="clockForegroundColorPicker"
                                      Width="100" Margin="4" SelectedColorChanged="clockForegroundColorPicker_SelectedColorChanged"  />
-                    <!--<Label Content="フォント" />
-        <Button x:Name="fontButton" Content="フォントを選択" Click="fontButton_Click" />-->
                     
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="200"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="フォント" Grid.Column="0" Grid.Row="0" />
+                        <ListBox x:Name="fontFamilyListBox" Grid.Column="0" Grid.Row="1"
+                                 ItemsSource="{x:Static Fonts.SystemFontFamilies}" 
+                                 SelectionChanged="fontFamilyListBox_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontFamily="{Binding}" FontSize="16"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Label Content="スタイル" Grid.Column="1" Grid.Row="0" />
+                        <ListBox x:Name="fontStyleListBox" Grid.Column="1" Grid.Row="1"
+                                 DisplayMemberPath="AdjustedFaceNames[en-US]"
+                                 SelectionChanged="fontStyleListBox_SelectionChanged"/>
+                        <Label Content="サイズ" Grid.Column="2" Grid.Row="0" />
+                        <ListBox x:Name="fontSizeListBox" Grid.Column="2" Grid.Row="1"
+                                 SelectionChanged="fontSizeListBox_SelectionChanged"/>
+                    </Grid>
                 </StackPanel>
             </TabItem>
             <TabItem Header="音声">

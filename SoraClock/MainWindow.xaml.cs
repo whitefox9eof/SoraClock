@@ -65,8 +65,7 @@ namespace SoraClock
             SolidColorBrush scb = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
             outlineBorder.BorderBrush = (Brush)scb;
             inlineBorder.BorderBrush = outlineBorder.BorderBrush;
-            // 時刻文字色の初期化
-            clockTextBlock.Foreground = scb;
+            // 時刻初期化
             DateTime time = DateTime.Now;
             clockTextBlock.Text = time.ToString(settings.TimeFormat);
             
@@ -200,16 +199,7 @@ namespace SoraClock
                         inlineBorder.BorderThickness = new Thickness(3);
                     }
                     break;
-                // フォント
-                case "ClockForegroundColor":
-                    clockTextBlock.Foreground = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
-                    break;
             }
-        }
-
-        private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
-        {
-            Debug.WriteLine("ちぇんじんぐうううううううううううううう");
         }
 
         /// <summary>

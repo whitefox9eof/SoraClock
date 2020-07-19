@@ -24,13 +24,19 @@
       <Value Profile="(Default)">HH:mm</Value>
     </Setting>
     <Setting Name="FontFamily" Type="System.Windows.Media.FontFamily" Scope="User">
-      <Value Profile="(Default)">Lucida Sans Unicode</Value>
+      <Value Profile="(Default)">Averia Libre</Value>
     </Setting>
     <Setting Name="VoiceVolume" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">70</Value>
     </Setting>
     <Setting Name="WindowBorder" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="FontStyle" Type="System.Windows.FontStyle" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="FontSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
     </Setting>
   </Settings>
 </SettingsFile>
