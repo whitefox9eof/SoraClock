@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Media;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -9,11 +8,6 @@ namespace SoraClock
 {
     public static class SCTools : Object
     {
-        public static SolidColorBrush stringToSolidColorBrush(string colorCode)
-        {
-            Color color = (Color)ColorConverter.ConvertFromString(colorCode);
-            return new SolidColorBrush(color);
-        }
         /// <summary>
         /// voiceフォルダの音声を再生する
         /// </summary>
@@ -41,7 +35,7 @@ namespace SoraClock
             InitializeComponent();
             // タイマーの初期設定
             timer = new DispatcherTimer(DispatcherPriority.SystemIdle);
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromSeconds(1); // 時計は1秒ごとに更新
             timer.Tick += Timer_Tick;
             currentHour = DateTime.Now.Hour;
             timer.Start();
@@ -58,13 +52,7 @@ namespace SoraClock
             { Top = settings.WindowTop; }
             else
             { Top = (SystemParameters.VirtualScreenHeight - Height) / 2; }
-            // 色・不透明度
-            windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor);
-            windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
-            // 枠線の初期化
-            SolidColorBrush scb = SCTools.stringToSolidColorBrush(settings.ClockForegroundColor);
-            outlineBorder.BorderBrush = (Brush)scb;
-            inlineBorder.BorderBrush = outlineBorder.BorderBrush;
+            windowBackgroundColor.Opacity = settings.WindowOpacity == 0 ? 0.01 : settings.WindowOpacity;
             // 時刻初期化
             DateTime time = DateTime.Now;
             clockTextBlock.Text = time.ToString(settings.TimeFormat);
@@ -77,7 +65,8 @@ namespace SoraClock
         /// <param name="e"></param>
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            await System.Threading.Tasks.Task.Delay(1000);
+            // 再生を遅延させないと音声の頭が再生されない
+            await System.Threading.Tasks.Task.Delay(1900);
             DateTime time = DateTime.Now;
             // 起動時のボイス
             if (time.Hour >= 4 && time.Hour <= 10)
@@ -117,9 +106,11 @@ namespace SoraClock
         /// <param name="e"></param>
         private void exitMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // 終了前にウィンドウ位置を保存
+            // 終了時にウィンドウの設定を保存
             settings.WindowLeft = Left;
             settings.WindowTop = Top;
+            settings.Width = Width;
+            settings.Height = Height;
             settings.Save();
             Application.Current.Shutdown();
         }
@@ -165,12 +156,15 @@ namespace SoraClock
         {
             SettingWindow window = new SettingWindow();
             window.Closed += Window_Closed;
-            //MainSettings.Default.SettingChanging += Default_SettingChanging;
             MainSettings.Default.PropertyChanged += Default_PropertyChanged;
             window.Show();
            settingsMenuItem.IsEnabled = false;
         }
-
+        /// <summary>
+        /// 設定画面での変更を反映する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             //Debug.WriteLine(e.PropertyName);
@@ -180,24 +174,16 @@ namespace SoraClock
                 case "TimeFormat":
                     clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
                     break;
-                // ウィンドウ
+                case "ResizeMode":
+                    if(settings.ResizeMode == ResizeMode.CanResizeWithGrip)
+                    {
+                        ClockWindow.ResizeMode = ResizeMode.CanResizeWithGrip;
+                        exitResizeButton.Visibility = Visibility.Visible;
+                    }
+                    break;
                 case "WindowOpacity":
-                    windowBackgroundColor.Opacity = (double)settings.WindowOpacity / 100;
-                    break;
-                case "WindowBackgroundColor":
-                    windowBackgroundColor.Color = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor); 
-                    break;
-                case "WindowBorder":
-                    if (settings.WindowBorder == true)
-                    {
-                        outlineBorder.BorderThickness = new Thickness(0);
-                        inlineBorder.BorderThickness = new Thickness(0);
-                    }
-                    else
-                    {
-                        outlineBorder.BorderThickness = new Thickness(1);
-                        inlineBorder.BorderThickness = new Thickness(3);
-                    }
+                    // ウィンドウは完全に透明になるとアクションを拾えなくなるため目視で分からない程度に色を残す
+                    windowBackgroundColor.Opacity = settings.WindowOpacity == 0 ? 0.01 : settings.WindowOpacity;
                     break;
             }
         }
@@ -211,6 +197,17 @@ namespace SoraClock
         {
             settingsMenuItem.IsEnabled = true;
         }
-
+        /// <summary>
+        /// ウィンドウサイズ変更を終了
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exitResizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            exitResizeButton.Visibility = Visibility.Hidden;
+            ClockWindow.ResizeMode = ResizeMode.NoResize;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.Save();
+        }
     }
 }

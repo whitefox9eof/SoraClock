@@ -1,16 +1,13 @@
 ﻿using IWshRuntimeLibrary;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections.ObjectModel;
 
 namespace SoraClock
 {
@@ -33,8 +30,8 @@ namespace SoraClock
             timeFormatTextBox.Text = settings.TimeFormat;
             // ウィンドウの設定
             clockBackgroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.WindowBackgroundColor);
-            opacitySlider.Value = settings.WindowOpacity;
-            windowBorderCheckBox.IsChecked = settings.WindowBorder;
+            opacitySlider.Value = (int)(settings.WindowOpacity * 100);
+            windowBorderCheckBox.IsChecked = (settings.OutlineBordorThickness.Left > 0) ? true : false;
             // フォント
             clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor);
             fontFamilyListBox.SelectedItem = settings.FontFamily;
@@ -104,13 +101,27 @@ namespace SoraClock
             fileInfo.Delete();
         }
         /// <summary>
-        /// 背景の不透明度を変更
+        /// 時刻表示のフォーマット
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timeFormatTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            // TextChangedイベントの時だけsettings=nullになることがありアプリ停止してしまうため
+            if (settings != null)
+            {
+                settings.TimeFormat = timeFormatTextBox.Text;
+                settings.Save();
+            }
+        }
+        /// <summary>
+        /// ウィンドウの不透明度を変更
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void opacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            settings.WindowOpacity = (int)e.NewValue;
+            settings.WindowOpacity = e.NewValue / 100;
             settings.Save();
         }
         /// <summary>
@@ -130,13 +141,14 @@ namespace SoraClock
         /// <param name="e"></param>
         private void windowBorderCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            settings.WindowBorder = true;
+            settings.OutlineBordorThickness = new Thickness(3);
+            settings.InlineBordorThickness = new Thickness(1);
             settings.Save();
         }
-
         private void windowBorderCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            settings.WindowBorder = false;
+            settings.OutlineBordorThickness = new Thickness(0);
+            settings.InlineBordorThickness = new Thickness(0);
             settings.Save();
         }
 
@@ -149,21 +161,6 @@ namespace SoraClock
         {
             settings.ClockForegroundColor = clockForegroundColorPicker.SelectedColorText;
             settings.Save();
-        }
-
-        /// <summary>
-        /// 時刻表示のフォーマット
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void timeFormatTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            // TextChangedイベントの時だけsettings=nullになることがありアプリ停止してしまうため
-            if(settings != null)
-            {
-                settings.TimeFormat = timeFormatTextBox.Text;
-                settings.Save();
-            }
         }
 
         /// <summary>
@@ -229,6 +226,16 @@ namespace SoraClock
         private void fontSizeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             settings.FontSize = (int)fontSizeListBox.SelectedItem;
+            settings.Save();
+        }
+        /// <summary>
+        /// ウィンドウ右下にグリップマークを表示してリサイズ可能にする
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void resizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            settings.ResizeMode = ResizeMode.CanResizeWithGrip;
             settings.Save();
         }
     }

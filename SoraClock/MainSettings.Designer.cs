@@ -61,10 +61,10 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int WindowOpacity {
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double WindowOpacity {
             get {
-                return ((int)(this["WindowOpacity"]));
+                return ((double)(this["WindowOpacity"]));
             }
             set {
                 this["WindowOpacity"] = value;
@@ -133,18 +133,6 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool WindowBorder {
-            get {
-                return ((bool)(this["WindowBorder"]));
-            }
-            set {
-                this["WindowBorder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
         public global::System.Windows.FontStyle FontStyle {
             get {
@@ -164,6 +152,66 @@ namespace SoraClock {
             }
             set {
                 this["FontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1,1,1,1")]
+        public global::System.Windows.Thickness OutlineBordorThickness {
+            get {
+                return ((global::System.Windows.Thickness)(this["OutlineBordorThickness"]));
+            }
+            set {
+                this["OutlineBordorThickness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3,3,3,3")]
+        public global::System.Windows.Thickness InlineBordorThickness {
+            get {
+                return ((global::System.Windows.Thickness)(this["InlineBordorThickness"]));
+            }
+            set {
+                this["InlineBordorThickness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        public double Width {
+            get {
+                return ((double)(this["Width"]));
+            }
+            set {
+                this["Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public double Height {
+            get {
+                return ((double)(this["Height"]));
+            }
+            set {
+                this["Height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("CanResizeWithGrip")]
+        public global::System.Windows.ResizeMode ResizeMode {
+            get {
+                return ((global::System.Windows.ResizeMode)(this["ResizeMode"]));
+            }
+            set {
+                this["ResizeMode"] = value;
             }
         }
     }

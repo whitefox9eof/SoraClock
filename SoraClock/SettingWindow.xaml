@@ -38,6 +38,9 @@
             </TabItem>
             <TabItem Header="ウィンドウ">
                 <StackPanel HorizontalAlignment="Left">
+                    <Label Content="ウィンドウサイズ" />
+                    <Button x:Name="resizeButton" Content="ウィンドウサイズを変更する"
+                            Click="resizeButton_Click"/>
                     <Label Content="背景の不透明度" />
                     <StackPanel Orientation="Horizontal" Margin="0">
                         <Slider x:Name="opacitySlider" Value="{Binding Text, ElementName=opacityTextBox}"
@@ -46,6 +49,7 @@
                         <TextBox x:Name="opacityTextBox" Text="{Binding Value, ElementName=opacitySlider}" Margin="4" Width="40" />
                     </StackPanel>
                     <Label Content="背景色" />
+                    
                     <xctk:ColorPicker x:Name="clockBackgroundColorPicker"
                                       Width="100" Margin="4" SelectedColorChanged="clockBackgroundColorPicker_SelectedColorChanged" />
                     <CheckBox x:Name="windowBorderCheckBox" Content="ウィンドウの枠線を表示する"

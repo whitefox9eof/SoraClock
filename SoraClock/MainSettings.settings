@@ -11,8 +11,8 @@
     <Setting Name="Topmost" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="WindowOpacity" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="WindowOpacity" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="ClockForegroundColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">#FFFFA5A5</Value>
@@ -29,14 +29,26 @@
     <Setting Name="VoiceVolume" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">70</Value>
     </Setting>
-    <Setting Name="WindowBorder" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="FontStyle" Type="System.Windows.FontStyle" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="FontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="OutlineBordorThickness" Type="System.Windows.Thickness" Scope="User">
+      <Value Profile="(Default)">1,1,1,1</Value>
+    </Setting>
+    <Setting Name="InlineBordorThickness" Type="System.Windows.Thickness" Scope="User">
+      <Value Profile="(Default)">3,3,3,3</Value>
+    </Setting>
+    <Setting Name="Width" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">150</Value>
+    </Setting>
+    <Setting Name="Height" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="ResizeMode" Type="System.Windows.ResizeMode" Scope="User">
+      <Value Profile="(Default)">CanResizeWithGrip</Value>
     </Setting>
   </Settings>
 </SettingsFile>
