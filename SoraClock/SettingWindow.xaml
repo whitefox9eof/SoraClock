@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:SoraClock"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="設定" Height="360" Width="480" Icon="/icon.ico"  Background="#FFC8E7EC">
+        Title="設定" Height="360" Width="480"
+        WindowStartupLocation="CenterScreen"
+        Icon="/icon.ico"  Background="#FFC8E7EC">
     <Grid>
         <TabControl TabStripPlacement="Left">
             <TabControl.Resources>
