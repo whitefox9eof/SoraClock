@@ -21,7 +21,7 @@
       <Value Profile="(Default)">#FFC8E7EC</Value>
     </Setting>
     <Setting Name="TimeFormat" Type="System.String" Scope="User">
-      <Value Profile="(Default)">HH:mm</Value>
+      <Value Profile="(Default)">HH:mm:ss</Value>
     </Setting>
     <Setting Name="FontFamily" Type="System.Windows.Media.FontFamily" Scope="User">
       <Value Profile="(Default)">Averia Libre</Value>
@@ -33,7 +33,7 @@
       <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="FontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">24</Value>
     </Setting>
     <Setting Name="OutlineBordorThickness" Type="System.Windows.Thickness" Scope="User">
       <Value Profile="(Default)">1,1,1,1</Value>
@@ -42,13 +42,16 @@
       <Value Profile="(Default)">3,3,3,3</Value>
     </Setting>
     <Setting Name="Width" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">150</Value>
+      <Value Profile="(Default)">200</Value>
     </Setting>
     <Setting Name="Height" Type="System.Double" Scope="User">
       <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="ResizeMode" Type="System.Windows.ResizeMode" Scope="User">
-      <Value Profile="(Default)">CanResizeWithGrip</Value>
+      <Value Profile="(Default)">NoResize</Value>
+    </Setting>
+    <Setting Name="ResizePopup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

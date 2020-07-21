@@ -97,7 +97,7 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("HH:mm")]
+        [global::System.Configuration.DefaultSettingValueAttribute("HH:mm:ss")]
         public string TimeFormat {
             get {
                 return ((string)(this["TimeFormat"]));
@@ -145,7 +145,7 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("24")]
         public int FontSize {
             get {
                 return ((int)(this["FontSize"]));
@@ -181,7 +181,7 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
         public double Width {
             get {
                 return ((double)(this["Width"]));
@@ -205,13 +205,25 @@ namespace SoraClock {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CanResizeWithGrip")]
+        [global::System.Configuration.DefaultSettingValueAttribute("NoResize")]
         public global::System.Windows.ResizeMode ResizeMode {
             get {
                 return ((global::System.Windows.ResizeMode)(this["ResizeMode"]));
             }
             set {
                 this["ResizeMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResizePopup {
+            get {
+                return ((bool)(this["ResizePopup"]));
+            }
+            set {
+                this["ResizePopup"] = value;
             }
         }
     }

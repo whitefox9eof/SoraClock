@@ -1,8 +1,11 @@
 ﻿using IWshRuntimeLibrary;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -11,12 +14,21 @@ using System.Windows.Media;
 
 namespace SoraClock
 {
+    public class ResetEventArgs : EventArgs
+    {
+
+    }
     /// <summary>
     /// SettingWindow.xaml の相互作用ロジック
     /// </summary>
     public partial class SettingWindow : Window
     {
         private MainSettings settings;
+        public delegate void ResetHandler(object sender, ResetEventArgs Args);
+        public event ResetHandler ResetEvent;
+        //public delegate void ResizeHandler(object sender, EventArgs Args);
+        //public event ResizeHandler ResizeEvent;
+        //public delegate void MainWindowTopmost();
 
         public SettingWindow()
         {
@@ -50,7 +62,7 @@ namespace SoraClock
         /// <param name="e"></param>
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            string shortcutPath = getShortcutPath(); 
+            string shortcutPath = getShortcutPath();
             string targetPath = Assembly.GetExecutingAssembly().Location;
 
             WshShell shell = new WshShell();
@@ -170,7 +182,7 @@ namespace SoraClock
         /// <param name="e"></param>
         private void voiceVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(settings != null)
+            if (settings != null)
             {
                 settings.VoiceVolume = (int)voiceVolumeSlider.Value;
                 settings.Save();
@@ -199,7 +211,6 @@ namespace SoraClock
             fontStyleListBox.ItemsSource = settings.FontFamily.FamilyTypefaces;
             FamilyTypeface ft = (FamilyTypeface)fontStyleListBox.Items[1];
             fontStyleListBox.SelectedItem = ft.Style;
-            Debug.WriteLine("ちぇんじど"+ft.Style);
             settings.FontStyle = ft.Style;
             settings.Save();
         }
@@ -210,7 +221,7 @@ namespace SoraClock
         /// <param name="e"></param>
         private void fontStyleListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(fontStyleListBox.SelectedItem != null)
+            if (fontStyleListBox.SelectedItem != null)
             {
                 // フォントファミリー変更時のスタイルリセットでnullになるため
                 FamilyTypeface ft = (FamilyTypeface)fontStyleListBox.SelectedItem;
@@ -236,7 +247,31 @@ namespace SoraClock
         private void resizeButton_Click(object sender, RoutedEventArgs e)
         {
             settings.ResizeMode = ResizeMode.CanResizeWithGrip;
+            // 一度メインウィンドウを最前面にして戻す
+            bool tmpTopmost = settings.Topmost;
+            settings.Topmost = true;
+            settings.ResizePopup = true;
             settings.Save();
+            settings.Topmost = tmpTopmost;
+            settings.Save();
+        }
+        /// <summary>
+        /// 設定値を初期化する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void defaultButton_Click(object sender, RoutedEventArgs e)
+        {
+            settings.Reset();
+            this.ResetEvent(this, new ResetEventArgs());
+            settings.Save();
+            // 一度メインウィンドウを最前面にして戻す
+            bool tmpTopmost = settings.Topmost;
+            settings.Topmost = true;
+            settings.Save();
+            settings.Topmost = tmpTopmost;
+            settings.Save();
+
         }
     }
 }

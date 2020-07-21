@@ -8,7 +8,9 @@
         Title="MainWindow"
         Width="{Binding Path=Width,Source={x:Static local:MainSettings.Default}}"
         Height="{Binding Path=Height,Source={x:Static local:MainSettings.Default}}"
-        WindowStyle="None"  AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Topmost="{Binding Path=Topmost,Source={x:Static local:MainSettings.Default}}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         ContentRendered="MainWindow_ContentRendered">
     <Window.Background>
@@ -30,22 +32,31 @@
                         Value="{Binding Path=ClockForegroundColor,Source={x:Static local:MainSettings.Default}}" />
             </Style>
         </Grid.Resources>
+        <Popup x:Name="resizeMessagePopup"
+               IsOpen="{Binding Path=ResizePopup,Source={x:Static local:MainSettings.Default}}"
+               PlacementTarget="{Binding ElementName=ClockWindow}" Placement="Center"
+               Opened="resizeMessagePopup_Opened">
+            <TextBlock Text="ウィンドウ右下のマークをドラッグして、サイズを変更してください"
+                       Padding="4" Foreground="White" />
+        </Popup>
+        <Popup x:Name="resizeExitPopup"
+               IsOpen="{Binding Path=ResizePopup,Source={x:Static local:MainSettings.Default}}"
+               PlacementTarget="{Binding ElementName=ClockWindow}" Placement="Bottom">
+            <Button Padding="4" Content="サイズ変更を終了する" Click="Button_Click" />
+        </Popup>
         <Border BorderThickness="{Binding Path=OutlineBordorThickness,Source={x:Static local:MainSettings.Default}}">
             <Border Margin="3"
                 BorderThickness="{Binding Path=InlineBordorThickness,Source={x:Static local:MainSettings.Default}}">
-            <Grid>
-                <TextBlock x:Name="clockTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center"
+                <Grid>
+                    <TextBlock x:Name="clockTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center"
                            FontFamily="{Binding Path=FontFamily,Source={x:Static local:MainSettings.Default}}"
                            FontStyle="{Binding Path=FontStyle,Source={x:Static local:MainSettings.Default}}"
                            FontSize="{Binding Path=FontSize,Source={x:Static local:MainSettings.Default}}"
                            Foreground="{Binding Path=ClockForegroundColor,Source={x:Static local:MainSettings.Default}}">
-                    <TextBlock.Effect>
-                        <DropShadowEffect ShadowDepth="1" Direction="330" Color="#FFF0D9DB" Opacity="0.3" BlurRadius="4"/>
-                    </TextBlock.Effect>
-                </TextBlock>
-                    <Button x:Name="exitResizeButton" Content="ウィンドウサイズ変更を終了する"
-                            Height="30" Width="200" Visibility="Hidden"
-                            Click="exitResizeButton_Click"/>
+                        <TextBlock.Effect>
+                            <DropShadowEffect ShadowDepth="1" Direction="330" Color="#FFF0D9DB" Opacity="0.3" BlurRadius="4"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
                 </Grid>
             </Border>
         </Border>

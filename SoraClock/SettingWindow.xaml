@@ -31,17 +31,29 @@
             </TabControl.Resources>
             <TabItem Header="全般">
                 <StackPanel HorizontalAlignment="Left">
+                    <Grid Margin="0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" x:Name="defaultButton" Content="初期設定に戻す"
+                                Click="defaultButton_Click"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="※全ての設定値がアプリインストール時の値に戻ります"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
                     <CheckBox x:Name="startupCheckBox" Content="スタートアップに登録" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                     <Label Content="時刻の表示形式" />
                     <TextBox x:Name="timeFormatTextBox"
                              Text="{Binding Path=TimeFormat,Source={x:Static local:MainSettings.Default}}"
-                             Margin="4" TextChanged="timeFormatTextBox_TextChanged"/>
+                             Width="200"
+                             TextChanged="timeFormatTextBox_TextChanged"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="ウィンドウ">
                 <StackPanel HorizontalAlignment="Left">
                     <Label Content="ウィンドウサイズ" />
-                    <Button x:Name="resizeButton" Content="ウィンドウサイズを変更する"
+                    <ToggleButton x:Name="resizeButton" Content="ウィンドウサイズを変更する"
                             Click="resizeButton_Click"/>
                     <Label Content="背景の不透明度" />
                     <StackPanel Orientation="Horizontal" Margin="0">
