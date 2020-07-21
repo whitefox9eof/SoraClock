@@ -163,7 +163,6 @@ namespace SoraClock
         private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             SettingWindow window = new SettingWindow();
-            window.Owner = this;
             window.Closed += Window_Closed;
             MainSettings.Default.PropertyChanged += Default_PropertyChanged;
             window.ResetEvent += Setting_ResetEvent;
