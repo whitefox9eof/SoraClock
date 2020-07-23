@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:SoraClock"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="設定" Height="360" Width="480"
+        Title="設定" Height="360" Width="400"
         WindowStartupLocation="CenterScreen"
         Icon="/icon.ico"  Background="#FFC8E7EC">
     <Grid>
-        <TabControl TabStripPlacement="Left">
+        <TabControl>
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Padding" Value="14,4" />
@@ -27,6 +27,9 @@
                 </Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Padding" Value="4,4" />
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="4,4" />
                 </Style>
             </TabControl.Resources>
             <TabItem Header="全般">
@@ -48,6 +51,20 @@
                              Text="{Binding Path=TimeFormat,Source={x:Static local:MainSettings.Default}}"
                              Width="200"
                              TextChanged="timeFormatTextBox_TextChanged"/>
+                    <GroupBox>
+                        <GroupBox.Header>例</GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Text="yyyy/MM/dd HH:mm:ss → 2018/07/26 09:25:01" />
+                            <TextBlock Text="yy年M月d日 tth時m分s秒 → 18年7月26日 午前9時25分1秒" />
+                            <TextBlock>
+                                さらに詳細な記述方法は
+                                <Hyperlink x:Name="formatHelpLink"
+                                    NavigateUri="https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/custom-date-and-time-format-strings"
+                                    Click="formatHelpLink_Click">こちら</Hyperlink>
+                                をご覧ください
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="ウィンドウ">

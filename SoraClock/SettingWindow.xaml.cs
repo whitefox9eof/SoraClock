@@ -273,5 +273,24 @@ namespace SoraClock
             settings.Save();
 
         }
+        /// <summary>
+        /// 時刻フォーマットのヘルプリンク
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void formatHelpLink_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Documents.Hyperlink hyperlink = (System.Windows.Documents.Hyperlink)e.OriginalSource;
+            string target = hyperlink.NavigateUri.OriginalString;
+            try
+            {
+                System.Diagnostics.Process.Start(target);
+            }
+            catch 
+            {
+                target = target.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {target}") { CreateNoWindow = true });
+            }
+        }
     }
 }
