@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -10,6 +11,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace SoraClock
@@ -26,6 +28,7 @@ namespace SoraClock
         private MainSettings settings;
         public delegate void ResetHandler(object sender, ResetEventArgs Args);
         public event ResetHandler ResetEvent;
+        private readonly CollectionViewSource cvs = new CollectionViewSource();
         //public delegate void ResizeHandler(object sender, EventArgs Args);
         //public event ResizeHandler ResizeEvent;
         //public delegate void MainWindowTopmost();
@@ -45,6 +48,8 @@ namespace SoraClock
             opacitySlider.Value = (int)(settings.WindowOpacity * 100);
             windowBorderCheckBox.IsChecked = (settings.OutlineBordorThickness.Left > 0) ? true : false;
             // フォント
+            ICollectionView view = CollectionViewSource.GetDefaultView(Fonts.SystemFontFamilies);
+            new FontFilter(view, this.fontFamilyTextBox);
             clockForegroundColorPicker.SelectedColor = (Color)ColorConverter.ConvertFromString(settings.ClockForegroundColor);
             fontFamilyListBox.SelectedItem = settings.FontFamily;
             fontStyleListBox.SelectedItem = settings.FontStyle;
@@ -206,13 +211,16 @@ namespace SoraClock
         /// <param name="e"></param>
         private void fontFamilyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // フォントファミリーが変更されたらスタイルを1番目に設定
-            settings.FontFamily = (FontFamily)fontFamilyListBox.SelectedItem;
-            fontStyleListBox.ItemsSource = settings.FontFamily.FamilyTypefaces;
-            FamilyTypeface ft = (FamilyTypeface)fontStyleListBox.Items[1];
-            fontStyleListBox.SelectedItem = ft.Style;
-            settings.FontStyle = ft.Style;
-            settings.Save();
+            if(fontFamilyListBox.SelectedItem != null)
+            {
+                // フォントファミリーが変更されたらスタイルを1番目に設定
+                settings.FontFamily = (FontFamily)fontFamilyListBox.SelectedItem;
+                fontStyleListBox.ItemsSource = settings.FontFamily.FamilyTypefaces;
+                FamilyTypeface ft = (FamilyTypeface)fontStyleListBox.Items[1];
+                fontStyleListBox.SelectedItem = ft.Style;
+                settings.FontStyle = ft.Style;
+                settings.Save();
+            }
         }
         /// <summary>
         /// フォントスタイル
@@ -292,5 +300,7 @@ namespace SoraClock
                 Process.Start(new ProcessStartInfo("cmd", $"/c start {target}") { CreateNoWindow = true });
             }
         }
+
+
     }
 }
