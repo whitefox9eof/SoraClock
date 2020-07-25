@@ -132,6 +132,7 @@ namespace SoraClock
             {
                 settings.TimeFormat = timeFormatTextBox.Text;
                 settings.Save();
+                mainWindow.clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
             }
         }
         /// <summary>
@@ -143,6 +144,10 @@ namespace SoraClock
         {
             settings.WindowOpacity = e.NewValue / 100;
             settings.Save();
+            // ウィンドウは完全に透明になるとアクションを拾えなくなるため目視で分からない程度に色を残す
+            if(settings.WindowOpacity == 0)
+            { mainWindow.windowBackgroundColor.Opacity = 0.01; }
+            else { mainWindow.windowBackgroundColor.Opacity = settings.WindowOpacity; }
         }
         /// <summary>
         /// 背景色の変更

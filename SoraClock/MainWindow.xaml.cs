@@ -161,30 +161,8 @@ namespace SoraClock
         {
             SettingWindow window = new SettingWindow();
             window.Closed += Window_Closed;
-            MainSettings.Default.PropertyChanged += Default_PropertyChanged;
             window.Show();
            settingsMenuItem.IsEnabled = false;
-        }
-
-        /// <summary>
-        /// 設定画面での変更を反映する
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                // 全般
-                case "TimeFormat":
-                    clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
-                    break;
-                // ウィンドウ
-                case "WindowOpacity":
-                    // ウィンドウは完全に透明になるとアクションを拾えなくなるため目視で分からない程度に色を残す
-                    windowBackgroundColor.Opacity = settings.WindowOpacity == 0 ? 0.01 : settings.WindowOpacity;
-                    break;
-            }
         }
 
         /// <summary>
