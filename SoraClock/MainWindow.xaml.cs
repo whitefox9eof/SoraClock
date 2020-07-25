@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -52,20 +53,16 @@ namespace SoraClock
             else
             { Top = (SystemParameters.VirtualScreenHeight - Height) / 2; }
             windowBackgroundColor.Opacity = settings.WindowOpacity == 0 ? 0.01 : settings.WindowOpacity;
-            // ウィンドウリサイズポップアップ非表示（正常に終了できなかった時用）
-            settings.ResizePopup = false;
             // 時刻初期化
             DateTime time = DateTime.Now;
             clockTextBlock.Text = time.ToString(settings.TimeFormat);
-            
+
         }
-        /// <summary>
-        /// ウィンドウを最前面に持ってくる(最前面に持ってくるだけで最前面固定にはしない)
-        /// </summary>
-        public void moveTopmost() {
-            this.Topmost = true;
-            Debug.WriteLine(Topmost);
-            this.Topmost = settings.Topmost;
+        public void moveTopmost()
+        {
+            // 一度メインウィンドウを最前面にして戻す
+            Topmost = true;
+            Topmost = settings.Topmost;
         }
 
         /// <summary>
@@ -119,8 +116,6 @@ namespace SoraClock
             // 終了時にウィンドウの位置を保存
             settings.WindowLeft = Left;
             settings.WindowTop = Top;
-            // リサイズ用のポップアップを非表示
-            settings.ResizePopup = false;
             settings.Save();
             Application.Current.Shutdown();
         }
@@ -134,6 +129,7 @@ namespace SoraClock
         {
             settings.Topmost = true;
             settings.Save();
+            Topmost = true;
         }
         /// <summary>
         /// 最前面解除
@@ -144,6 +140,7 @@ namespace SoraClock
         {
             settings.Topmost = false;
             settings.Save();
+            Topmost = false;
         }
 
         /// <summary>
@@ -165,36 +162,8 @@ namespace SoraClock
             SettingWindow window = new SettingWindow();
             window.Closed += Window_Closed;
             MainSettings.Default.PropertyChanged += Default_PropertyChanged;
-            window.ResetEvent += Setting_ResetEvent;
             window.Show();
            settingsMenuItem.IsEnabled = false;
-        }
-        /// <summary>
-        /// 設定が初期化された時
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="Args"></param>
-        private void Setting_ResetEvent(object sender, ResetEventArgs Args)
-        {
-            // ウィンドウリサイズのみ初期化が適用されないため個別に初期化する
-            // ※MainSettingへの保存には成功している
-            Width = settings.Width;
-            Height = settings.Height;
-        }
-
-        /// <summary>
-        /// ポップアップをメインウィンドウに追従させる
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainWindow_LocationChanged(object sender, EventArgs e)
-        {
-            var offset = resizeExitPopup.HorizontalOffset;
-            resizeExitPopup.HorizontalOffset = offset + 1;
-            resizeExitPopup.HorizontalOffset = offset;
-            offset = resizeMessagePopup.HorizontalOffset;
-            resizeMessagePopup.HorizontalOffset = offset + 1;
-            resizeMessagePopup.HorizontalOffset = offset;
         }
 
         /// <summary>
@@ -210,24 +179,10 @@ namespace SoraClock
                 case "TimeFormat":
                     clockTextBlock.Text = DateTime.Now.ToString(settings.TimeFormat);
                     break;
-                case "ResizeMode":
-                    if(settings.ResizeMode == ResizeMode.CanResizeWithGrip)
-                    {
-                        ClockWindow.ResizeMode = ResizeMode.CanResizeWithGrip;
-                    }
-                    break;
                 // ウィンドウ
                 case "WindowOpacity":
                     // ウィンドウは完全に透明になるとアクションを拾えなくなるため目視で分からない程度に色を残す
                     windowBackgroundColor.Opacity = settings.WindowOpacity == 0 ? 0.01 : settings.WindowOpacity;
-                    break;
-                // 設定を全初期化した時、ウィンドウサイズだけ反映されないため設定
-                // 再起動するとサイズが戻っているため保存はされている模様
-                case "Width":
-                    Width = settings.Width;
-                    break;
-                case "Height":
-                    Width = settings.Height;
                     break;
             }
         }
@@ -249,29 +204,15 @@ namespace SoraClock
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // 設定を保存
-            settings.ResizePopup = false;
             settings.Width = Width;
             settings.Height = Height;
-            settings.ResizeMode = ResizeMode.NoResize;
             settings.Save();
-            // リサイズモード変更時にWidthが小さくなる現象が発生するためウィンドウリサイズを再設定する
+            Topmost = settings.Topmost;
+            // リサイズモード変更時にWidthが小さくなる現象が発生するため再設定する
             ResizeMode = ResizeMode.NoResize;
             Width = settings.Width;
             Height = settings.Height;
-            // ポップアップ追従のためのハンドラを削除する
-            LocationChanged -= MainWindow_LocationChanged;
-            SizeChanged -= MainWindow_LocationChanged;
         }
-        /// <summary>
-        /// リサイズ用のポップアップが開いた時
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void resizeMessagePopup_Opened(object sender, EventArgs e)
-        {
-            // ウィンドウリサイズのポップアップをメインウィンドウに追従させる
-            LocationChanged += MainWindow_LocationChanged;
-            SizeChanged += MainWindow_LocationChanged;
-        }
+
     }
 }

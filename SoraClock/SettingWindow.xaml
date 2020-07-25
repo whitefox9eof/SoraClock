@@ -11,6 +11,7 @@
         Icon="/icon.ico"  Background="#FFC8E7EC"
         Closed="Window_Closed"
         >
+    
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Padding" Value="14,4" />
@@ -31,6 +32,7 @@
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="4,4" />
         </Style>
+        <Storyboard x:Key="resizeStoryboard"/>
     </Window.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0">
@@ -83,8 +85,14 @@
             <TabItem Header="ウィンドウ">
                 <StackPanel HorizontalAlignment="Left">
                     <Label Content="ウィンドウサイズ" />
-                    <ToggleButton x:Name="resizeButton" Content="ウィンドウサイズを変更する"
+                    <Button x:Name="resizeButton" Content="ウィンドウサイズを変更する"
                             Click="resizeButton_Click"/>
+                    <Button x:Name="exitResizeButton" Content="ウィンドウのサイズ変更を終了"
+                            Visibility="Collapsed" Click="exitResizeButton_Click">
+                        <Button.Effect>
+                            <DropShadowEffect ShadowDepth="2" Direction="330" Color="#FFF0D9DB" Opacity="0.8" BlurRadius="3"/>
+                        </Button.Effect>
+                    </Button>
                     <Label Content="背景の不透明度" />
                     <StackPanel Orientation="Horizontal" Margin="0">
                         <Slider x:Name="opacitySlider" Value="{Binding Text, ElementName=opacityTextBox}"

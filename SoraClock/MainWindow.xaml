@@ -9,7 +9,7 @@
         Width="{Binding Path=Width,Source={x:Static local:MainSettings.Default}}"
         Height="{Binding Path=Height,Source={x:Static local:MainSettings.Default}}"
         WindowStyle="None"
-        ResizeMode="NoResize"
+        ResizeMode="NoResize" AllowsTransparency="True"
         Topmost="{Binding Path=Topmost,Source={x:Static local:MainSettings.Default}}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         ContentRendered="MainWindow_ContentRendered">
@@ -32,18 +32,6 @@
                         Value="{Binding Path=ClockForegroundColor,Source={x:Static local:MainSettings.Default}}" />
             </Style>
         </Grid.Resources>
-        <Popup x:Name="resizeMessagePopup"
-               IsOpen="{Binding Path=ResizePopup,Source={x:Static local:MainSettings.Default}}"
-               PlacementTarget="{Binding ElementName=ClockWindow}" Placement="Center"
-               Opened="resizeMessagePopup_Opened">
-            <TextBlock Text="ウィンドウ右下のマークをドラッグして、サイズを変更してください"
-                       Padding="4" Foreground="White" />
-        </Popup>
-        <Popup x:Name="resizeExitPopup"
-               IsOpen="{Binding Path=ResizePopup,Source={x:Static local:MainSettings.Default}}"
-               PlacementTarget="{Binding ElementName=ClockWindow}" Placement="Bottom">
-            <Button Padding="4" Content="サイズ変更を終了する" Click="Button_Click" />
-        </Popup>
         <Border BorderThickness="{Binding Path=OutlineBordorThickness,Source={x:Static local:MainSettings.Default}}">
             <Border Margin="3"
                 BorderThickness="{Binding Path=InlineBordorThickness,Source={x:Static local:MainSettings.Default}}">

@@ -47,11 +47,5 @@
     <Setting Name="Height" Type="System.Double" Scope="User">
       <Value Profile="(Default)">80</Value>
     </Setting>
-    <Setting Name="ResizeMode" Type="System.Windows.ResizeMode" Scope="User">
-      <Value Profile="(Default)">NoResize</Value>
-    </Setting>
-    <Setting Name="ResizePopup" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

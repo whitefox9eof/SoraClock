@@ -25,6 +25,7 @@ namespace SoraClock
     /// </summary>
     public partial class SettingWindow : Window
     {
+        private MainWindow mainWindow = (MainWindow) App.Current.MainWindow;
         private MainSettings settings;
         private Dictionary<string, object> tmp = new Dictionary<string, object>();
         public delegate void ResetHandler(object sender, ResetEventArgs Args);
@@ -256,14 +257,12 @@ namespace SoraClock
         /// <param name="e"></param>
         private void resizeButton_Click(object sender, RoutedEventArgs e)
         {
-            settings.ResizeMode = ResizeMode.CanResizeWithGrip;
-            // 一度メインウィンドウを最前面にして戻す
-            bool tmpTopmost = settings.Topmost;
-            settings.Topmost = true;
-            settings.ResizePopup = true;
-            settings.Save();
-            settings.Topmost = tmpTopmost;
-            settings.Save();
+            resizeButton.Visibility = Visibility.Collapsed;
+            exitResizeButton.Visibility = Visibility.Visible;
+            mainWindow.ResizeMode = ResizeMode.CanResizeWithGrip;
+            string message = "ウィンドウサイズの変更が可能になりました。\nウィンドウ端をドラッグして変更してください。";
+            MessageBox.Show(message);
+            mainWindow.moveTopmost();
         }
         /// <summary>
         /// 設定値を初期化する
@@ -273,15 +272,12 @@ namespace SoraClock
         private void defaultButton_Click(object sender, RoutedEventArgs e)
         {
             settings.Reset();
-            this.ResetEvent(this, new ResetEventArgs());
             settings.Save();
-            // 一度メインウィンドウを最前面にして戻す
-            bool tmpTopmost = settings.Topmost;
-            settings.Topmost = true;
-            settings.Save();
-            settings.Topmost = tmpTopmost;
-            settings.Save();
-
+            mainWindow.moveTopmost();
+            // ウィンドウリサイズのみ初期化が適用されないため個別に初期化する
+            // ※MainSettingへの保存には成功している
+            mainWindow.Width = settings.Width;
+            mainWindow.Height = settings.Height;
         }
         /// <summary>
         /// 時刻フォーマットのヘルプリンク
@@ -321,12 +317,28 @@ namespace SoraClock
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            if(tmp == null)  return;
+            mainWindow.ResizeMode = ResizeMode.NoResize;
+            if (tmp == null)  return;
             // OKボタン以外で閉じたら設定値を設定前に戻す
             foreach (SettingsPropertyValue spv in settings.PropertyValues)
             {
                 settings[spv.Name] = tmp[spv.Name];
+                //Debug.WriteLine(spv.Name+":"+spv.PropertyValue);
             }
+            settings.Save();
+            mainWindow.Width = settings.Width;
+            mainWindow.Height = settings.Height;
+        }
+        /// <summary>
+        /// ウィンドウのサイズ変更を終了
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exitResizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            exitResizeButton.Visibility = Visibility.Collapsed;
+            resizeButton.Visibility = Visibility.Visible;
+            mainWindow.ResizeMode = ResizeMode.NoResize;
         }
     }
 }

@@ -202,29 +202,5 @@ namespace SoraClock {
                 this["Height"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NoResize")]
-        public global::System.Windows.ResizeMode ResizeMode {
-            get {
-                return ((global::System.Windows.ResizeMode)(this["ResizeMode"]));
-            }
-            set {
-                this["ResizeMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ResizePopup {
-            get {
-                return ((bool)(this["ResizePopup"]));
-            }
-            set {
-                this["ResizePopup"] = value;
-            }
-        }
     }
 }
