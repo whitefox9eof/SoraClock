@@ -26,17 +26,19 @@ namespace SoraClock
     public partial class SettingWindow : Window
     {
         private MainSettings settings;
+        private Dictionary<string, object> tmp = new Dictionary<string, object>();
         public delegate void ResetHandler(object sender, ResetEventArgs Args);
         public event ResetHandler ResetEvent;
-        private readonly CollectionViewSource cvs = new CollectionViewSource();
-        //public delegate void ResizeHandler(object sender, EventArgs Args);
-        //public event ResizeHandler ResizeEvent;
-        //public delegate void MainWindowTopmost();
 
         public SettingWindow()
         {
             InitializeComponent();
             settings = MainSettings.Default;
+            foreach(SettingsPropertyValue spv in settings.PropertyValues)
+            {
+                tmp.Add(spv.Name, spv.PropertyValue);
+            }
+
             // スタートアップ登録チェックボックス初期化
             if (System.IO.File.Exists(getShortcutPath()))
             {
@@ -122,7 +124,7 @@ namespace SoraClock
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void timeFormatTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void timeFormatTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // TextChangedイベントの時だけsettings=nullになることがありアプリ停止してしまうため
             if (settings != null)
@@ -290,17 +292,41 @@ namespace SoraClock
         {
             System.Windows.Documents.Hyperlink hyperlink = (System.Windows.Documents.Hyperlink)e.OriginalSource;
             string target = hyperlink.NavigateUri.OriginalString;
-            try
-            {
-                System.Diagnostics.Process.Start(target);
-            }
-            catch 
+            try { Process.Start(target); }
+            catch
             {
                 target = target.Replace("&", "^&");
                 Process.Start(new ProcessStartInfo("cmd", $"/c start {target}") { CreateNoWindow = true });
             }
         }
+        /// <summary>
+        /// OKボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void okButton_Click(object sender, RoutedEventArgs e)
+        {
+            tmp = null;
+            Close();
+        }
+        /// <summary>
+        /// キャンセルボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
 
-
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if(tmp == null)  return;
+            // OKボタン以外で閉じたら設定値を設定前に戻す
+            foreach (SettingsPropertyValue spv in settings.PropertyValues)
+            {
+                settings[spv.Name] = tmp[spv.Name];
+            }
+        }
     }
 }

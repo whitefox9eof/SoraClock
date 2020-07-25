@@ -8,7 +8,9 @@
         mc:Ignorable="d"
         Title="設定" Height="400" Width="400"
         WindowStartupLocation="CenterScreen"
-        Icon="/icon.ico"  Background="#FFC8E7EC">
+        Icon="/icon.ico"  Background="#FFC8E7EC"
+        Closed="Window_Closed"
+        >
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Padding" Value="14,4" />
@@ -30,7 +32,18 @@
             <Setter Property="Margin" Value="4,4" />
         </Style>
     </Window.Resources>
-    <Grid>
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="80" />
+                    <Setter Property="Height" Value="28" />
+                    <Setter Property="Margin" Value="0,10,10,10" />
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+            <Button x:Name="cancelButton" Content="キャンセル" Click="cancelButton_Click" />
+        </StackPanel>
         <TabControl>
             <TabItem Header="全般">
                 <StackPanel HorizontalAlignment="Left">
@@ -171,5 +184,5 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
-    </Grid>
+    </DockPanel>
 </Window>
